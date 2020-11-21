@@ -1,0 +1,7 @@
+[options]
+prefix = /home/josep/PAV
+libdir = lib
+buildtype = release
+
+[properties]
+

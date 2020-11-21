@@ -1,4 +1,4 @@
-/* Copyright (C) Universitat Politècnica de Catalunya, Barcelona, Spain.
+/* Copyright (C) Universitat Politï¿½cnica de Catalunya, Barcelona, Spain.
  *
  * Permission to copy, use, modify, sell and distribute this software
  * is granted provided this copyright notice appears in all copies.
@@ -111,6 +111,7 @@ namespace upc {
 
     for (n=0; n<data.nrow(); ++n) {
       /// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      lprob += gmm_logprob(data[n]);
     }    
     return lprob/n;
   }
@@ -207,8 +208,12 @@ namespace upc {
 	  //
 	  // EM loop: em_expectation + em_maximization.
 	  //
+      new_prob = em_expectation(data,weights);
+      em_maximization(data,weights);
       // Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
       // increase more than inc_threshold.
+      inc_prob = new_prob - old_prob;
+      old_prob = new_prob;
       if (verbose & 01)
 	cout << "GMM nmix=" << nmix << "\tite=" << iteration << "\tlog(prob)=" << new_prob << "\tinc=" << inc_prob << endl;
     }
