@@ -111,9 +111,10 @@ namespace upc {
 
     for (n=0; n<data.nrow(); ++n) {
       /// \TODO Compute the logprob of a single frame of the input data; you can use gmm_logprob() above.
+      /// \DONE Nos permite sumar todos los logprob
       lprob += gmm_logprob(data[n]);
     }    
-    return lprob/n;
+    return lprob/n; /*Tendremos el lprob media*/
   }
 
 
@@ -207,11 +208,12 @@ namespace upc {
 	  // Complete the loop in order to perform EM, and implement the stopping criterion.
 	  //
 	  // EM loop: em_expectation + em_maximization.
-	  //
-      new_prob = em_expectation(data,weights);
+	  /// \DONE
+      new_prob = em_expectation(data,weights); /*Nos proporciona el logaritmo de la prob nueva, que nos devuelve la prob total de la población*/
       em_maximization(data,weights);
       // Update old_prob, new_prob and inc_prob in order to stop the loop if logprob does not
       // increase more than inc_threshold.
+      /// \DONE
       inc_prob = new_prob - old_prob;
       old_prob = new_prob;
       if (verbose & 01)
