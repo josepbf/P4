@@ -20,7 +20,8 @@ if [[ $# != 3 ]]; then
 fi
 #El profesor ha dicho que en mfcc_orden haría falta el orden de analisis y el número de coeficientes
 #Para hacerlo bien debería de poner dos coeficientes el número del banco del filtro y el número de coefi castrales
-lpc_order=$1
+#lpc_order=$1
+mfcc_order=$1
 inputfile=$2
 outputfile=$3
 
@@ -41,11 +42,12 @@ fi
 
 # Main command for feature extration
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$MFCC -l 240 -m $mfcc_order -s 8 -m 13 -n 40 -w 1 > $base.mfcc #profe hay la opcin d cuantos filtro hay en el banco
+   $MFCC -l 240 -m $mfcc_order -s 8 -m 13 -n 40 -w 1 > $base.mfcc #profe: hay la opcin de cuantos filtro hay en el banco
+
 
 # Our array files need a header with the number of cols and rows:
 ncol=$((mfcc_order+1)) # REVISAR es con +1 o sin el +1 ?????
-nrow=`$X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+nrow=$($X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";')
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
 echo $nrow $ncol | $X2X +aI > $outputfile
