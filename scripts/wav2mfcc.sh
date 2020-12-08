@@ -1,9 +1,6 @@
 #!/bin/bash
 
 ## \file
-## \TODO This file implements a very trivial feature extraction; use it as a template for other front ends.
-## 
-## Please, read SPTK documentation and some papers in order to implement more advanced front ends.
 
 # Base name for temporary files
 base=/tmp/$(basename $0).$$ 
@@ -42,11 +39,11 @@ fi
 
 # Main command for feature extration
 sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-   $MFCC -l 240 -m $mfcc_order -s 8 -m 13 -n 40 -w 1 > $base.mfcc #profe: hay la opcin de cuantos filtro hay en el banco
-
+   $MFCC -l 240 -m $mfcc_order -s 8 -n 40 -w 1 > $base.mfcc 
+# Pasar -n como paramtero
 
 # Our array files need a header with the number of cols and rows:
-ncol=$((mfcc_order+1)) # REVISAR es con +1 o sin el +1 ?????
+ncol=$((mfcc_order)) # REVISAR es con +1 o sin el +1 ?????
 nrow=$($X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";')
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them

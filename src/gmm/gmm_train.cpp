@@ -33,7 +33,7 @@ int main(int argc, const char *argv[]) {
   Filename gmm_filename(DEF_GMMFILE);
   unsigned int init_iterations=DEF_ITERATIONS, em_iterations=DEF_ITERATIONS;
   float init_threshold=DEF_THR, em_threshold=DEF_THR;
-  int init_method=0;
+  int init_method=1; // 1 Incialización VQ
 
   ///Read command line options
   int retv = read_options(argc, argv, input_dir, input_ext, filenames,
