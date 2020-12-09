@@ -43,7 +43,7 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 # Pasar -n como paramtero
 
 # Our array files need a header with the number of cols and rows:
-ncol=$((mfcc_order)) # REVISAR es con +1 o sin el +1 ?????
+ncol=$((mfcc_order)) 
 nrow=$($X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";')
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
