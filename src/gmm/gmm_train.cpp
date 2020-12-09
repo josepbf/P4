@@ -66,7 +66,7 @@ int main(int argc, const char *argv[]) {
     gmm.em_split(data,nmix,init_iterations,init_threshold,verbose);
     break;
   default:
-    ///gmm.vq_lbg(data,nmix,init_iterations,init_threshold,verbose);
+    gmm.vq_lbg(data,nmix,init_iterations,init_threshold,verbose);
     ;
   }
 
