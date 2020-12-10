@@ -105,7 +105,7 @@ ejercicios indicados.
   ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
   nrow=$($X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";')
   ```
-  _En el fichero fmatrix se encuentra almacena la información mediante el número de filas y de columnas, seguidos por los datos._
+  _En el fichero fmatrix se encuentra almacenada la información mediante el número de filas y de columnas, seguido por los datos._
 
   _El número de columnas **(ncol)** es igual al número de coeficientes que conlleva calcularlo des del orden del predictor_
   _lineal más uno, ya que en el primer elemento del vector se almacena la ganancia de predicción._
@@ -124,7 +124,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
-  ### FALTA COMENTARLO UN POQUITO.
+  ### FALTA COMENTARLO UN POQUITO o NO
 
   ```sh
   # Main command for feature extration
@@ -138,7 +138,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>: 
-  ### FALTA COMENTARLO UN POQUITO.
+  ### FALTA COMENTARLO UN POQUITO o NO
 
   ```sh
   # Main command for feature extration
@@ -187,13 +187,17 @@ ejercicios indicados.
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
+  ### FALTA
+
   |                        | LP   | LPCC | MFCC |
   |------------------------|:----:|:----:|:----:|
   | &rho;<sub>x</sub>[2,3] |      |      |      |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
+  ### FALTA
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+  ### FALTA
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -230,7 +234,7 @@ Complete el código necesario para entrenar modelos GMM.
   _para los GMM de los locutores SES005(en rojo, arriba) y SES009(en azul, abajo); también se muestra_
   _la población del usuario SES005(en rojo, izquierda) y SES009(en azul, derecha)._
 
-  **Analice la capacidad del modelado GMM para diferenciar las señales de uno y otro.** FALTA explicar
+  ### FALTA: Analice la capacidad del modelado GMM para diferenciar las señales de uno y otro.** FALTA explicar
   (No sé como determinar si una señal pertenece a uno u otro locutor, no veo las gráficas)
 
 
@@ -243,6 +247,7 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+  ### FALTA:
 
   **Para obtener la tasa de errores FEAT=lp run_spkid classerr** ### QUITAR COMENTARIO cuando lo tengamos
   
@@ -270,6 +275,8 @@ Complete el código necesario para realizar verificación del locutor y optimice
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
 
+  ### FALTA:
+
   **Para obtener la tasa del score:  spk_verif_score verif.res** ### QUITAR COMENTARIO cuando lo tengamos
   
   + **Score obtenido por la paramtrización LP**
@@ -296,6 +303,8 @@ Complete el código necesario para realizar verificación del locutor y optimice
 
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
+
+  ### FALTA:
 
 ### Trabajo de ampliación.
 
