@@ -33,25 +33,155 @@ ejercicios indicados.
   principal (`sox`, `$X2X`, `$FRAME`, `$WINDOW` y `$LPC`). Explique el significado de cada una de las 
   opciones empleadas y de sus valores.
 
+  _**SoX**, Sound eXchange, the Swiss Army knife of audio manipulation, permite realizar multitud de tareas con ficheros de audio:_
+    * Conversión de formatos de señal y de fichero.
+    * Reproducción de audio en múltiples sistemas.
+    * Distintas operaciones de procesado de señal.
+    * Distintos efectos de audio.
+
+  _Las opciones que hemos usado son las de la salida que son las siguientes:_
+
+  + **-t:** Nos permite indicar el tipo de formato, en nuestro caso *raw*
+  + **-e** Nos permite indicar el tipo de codificación, en nuestro caso *unsigned-integer*
+  + **-b** Nos permite indicar el número de bits
+
+  _El programa se ejecuta des del shell y para ver sus opciones más relevante, lo ejecutamos mediante el comando *sox -h*._
+
+  <img src="image/SoX.PNG" width="640" align="center">
+
+  _A continuación vemos como se ha aplicado *SoX*, donde se usa para convertir de la ley mu a entero de dos bytes con signo_
+
+  ```cpp
+  sox spk_8mu/speecon/BLOCK01/SES014/SA014S24.wav -t raw -e signed -b 16 fichero
+  ```
+  
+  _**$X2X**, es el programa de SPTK que permite la conversión entre distintos formatos de datos._
+
+  _Las opciones que hemos usado son las siguientes:_
+  + **+type1** Le podemos indicar el tipo de entrada que tenemos, en nuestro caso hemos usado **+s (2 bytes)**.
+  + **+type2** Nos permite indicar el tipo de salida que queremos obtener, en nuestro caso **+f (4 bytes)**.
+
+  <img src="image/x2x.PNG" width="640" align="center">
+
+  _A continuación vemos como aplicamos el comando x2x para convertir los enteros de dos bytes a reales de cuatro bytes,
+  en nuestro caso convertir de short a float para obtener reales de coma flotante de 4 bytes:_
+
+  ```cpp
+  sox spk_8mu/speecon/BLOCK01/SES014/SA014S24.wav -t raw -e signed -b 16 fichero - | sptk x2x +s +f > fichero
+  ```
+  _**$FRAME**, Toma la señal en la entrada y devuelve a su salida la misma señal dividida en tramas de **l** muestras tomdas con un desplazamiento de **p** muestras_
+
+  _Las opciones que hemos usado son las siguientes:_
+    + **-l** Nos permite dividir la señal de entrada en tramas, en nuestro caso de 240 muestras
+    + **-p** Nos permite realizar un desplazamiento de la ventana, en nuestro caso con un desplazamiento de 80 muestras.
+
+  <img src="image/$frame.PNG" width="640" align="center">
+
+  _**$WINDOW**, nos permite multiplicar cada trama por una ventana(opción por defecto es la ventana Blackman)_
+
+  _Las opciones que hemos usado son las siguientes:_
+
+   + **-l** nos indica como esta organizado los datos en la entrada (tamaño de entrada de la trama)
+   + **-L** nos indica como lo queremos en la salida (tamaño de salida de la trama)
+
+  <img src="image/$window.PNG" width="640" align="center">
+
+
+  _**$LPC**, (Linear prediction coefficients), permite calcular los coeficientes de predicción lineal, 
+  es decir, calcula los lpc_order primeros coeficientes de predición lineal_
+
+  _Las opciones que hemos usado son las siguientes:_
+
+   + **-l** indica el tamaño de la trama
+   + **-m** indica el order de LPC
+
+  <img src="image/lpc.PNG" width="640" align="center">
+
 - Explique el procedimiento seguido para obtener un fichero de formato *fmatrix* a partir de los ficheros de
   salida de SPTK (líneas 45 a 47 del script `wav2lp.sh`).
+
+    ```sh
+  # Our array files need a header with the number of cols and rows:
+  ncol=$((lpc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+  nrow=$($X2X +fa < $base.lp | wc -l | perl -ne 'print $_/'$ncol', "\n";')
+  ```
+  _En el fichero fmatrix se encuentra almacena la información mediante el número de filas y de columnas, seguidos por los datos._
+
+  _El número de columnas **(ncol)** es igual al número de coeficientes que conlleva calcularlo des del orden del predictor_
+  _lineal más uno, ya que en el primer elemento del vector se almacena la ganancia de predicción._
+
+  _En el número de filas **(nrow)** es igual al número de tramas, debido a que depende de la longitud se la señal,_ 
+  _la longitud y desplazamiento de la ventana, y la cadena de comandos que se ejecutan para obtener la parametrización._ 
+  _Por todo lo nombrado anteriormente, es mejor, extraer esa información del fichero obtenido._
+
+  _Por lo tanto, lo hacemos convirtiendo la señal parametrizada a texto, usando sox +fa, y contando el número de líneas,_ 
+  _con el comando de UNIX wc -l._
 
   * ¿Por qué es conveniente usar este formato (u otro parecido)? Tenga en cuenta cuál es el formato de
     entrada y cuál es el de resultado.
 
+    _Porque nos permite ver a la salida los datos que tiene el fichero con la información de cuántas tramas y de cuántos coeficientes tenemos, en la cual queda visualizada en una matriz en forma ordenada  donde cada fila nos indica el número de tramas entre corchetes y en cada columna el valor que le corresponde a cada una de las tramas._
+
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
+  ### FALTA COMENTARLO UN POQUITO.
+
+  ```sh
+  # Main command for feature extration
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+	$LPC -l 240 -m $lpc_order | $LPC2C -m $lpc_order -M 25 > $base.lpcc
+
+  # Our array files need a header with the number of cols and rows:
+  ncol=$((lpcc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+  nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
+  ```
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
-  fichero <code>scripts/wav2mfcc.sh</code>:
+  fichero <code>scripts/wav2mfcc.sh</code>: 
+  ### FALTA COMENTARLO UN POQUITO.
+
+  ```sh
+  # Main command for feature extration
+  sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
+  $MFCC -l 240 -m $mfcc_order -s 8 -n 40 -w 1 > $base.mfcc
+
+  # Our array files need a header with the number of cols and rows:
+  ncol=$((mfcc_order)) 
+  nrow=$($X2X +fa < $base.mfcc | wc -l | perl -ne 'print $_/'$ncol', "\n";')
+  ```
 
 ### Extracción de características.
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
-  
+
+    ### FALTA LAS GRÁFICAS DE CADA PARAMETRIZACION de LP LPCC MFCC.
+     
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
+
+    _En primera instancia hemos procedido ha guardar los coeficientes 2 y 3 de la parametrización **LP, LPCC y MFCC**_ 
+    _con las siguientes órdenes:_
+
+      + _Parametrización LP_
+        ```
+          fmatrix_show work/lp/BLOCK01/SES017/*.lp | egrep '^\(' | cut -f4,5 > lp_2_3.txt
+        ```
+      + _Parametrización LPCC_
+        ```
+          fmatrix_show work/lp/BLOCK01/SES017/*.lpcc | egrep '^\(' | cut -f4,5 > lpcc_2_3.txt
+        ```
+      + _Parametrización MFCC_
+        ```
+          fmatrix_show work/lp/BLOCK01/SES017/*.mfcc | egrep '^\(' | cut -f4,5 > mfcc_2_3.txt
+        ```
+    _Después de convertir a texto los ficheros de parámetros de cada parametrización, hemos representado los valores_
+    _usando Pyton de esa forma obtener las gráficas_ 
+
+    ### FALTA EL código de pyton para representar las gráficas no sé si es f4,5 para lp si pero para lpcc y mfcc, no lo encontrado.
+
+
+
   + ¿Cuál de ellas le parece que contiene más información?
 
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
@@ -71,10 +201,41 @@ Complete el código necesario para entrenar modelos GMM.
 
 - Inserte una gráfica que muestre la función de densidad de probabilidad modelada por el GMM de un locutor
   para sus dos primeros coeficientes de MFCC.
+
+  _Para la visualización del modelo del locutor SES005, se ha ejecutado:_
+
+  ```
+  gmm_train -d work/mfcc -e mfcc -g SES005.gmm lists/class/SES005.train 
+
+  plot_gmm_feat work/gmm/mfcc/SES005.gmm
+  ```
+  _Podemos observar en gráfica como se muestran las regiones, por una parte una curva punteada exterior que encierra la región con el 90% de las tramas y con curva continua interna que encierra la región con el 50% de las tramas
+
+<img src="image/ModelaGMM.PNG" width="400" align="center">
+
   
 - Inserte una gráfica que permita comparar los modelos y poblaciones de dos locutores distintos (la gŕafica
   de la página 20 del enunciado puede servirle de referencia del resultado deseado). Analice la capacidad
   del modelado GMM para diferenciar las señales de uno y otro.
+
+  ```
+  plot_gmm_feat work/gmm/mfcc/SES005.gmm work/mfcc/BLOCK00/SES005/*
+  ```
+  <img src="image/Rojo_SES05.PNG" width="380" align="center"> 
+  <img src="image/Rojo_Azul_SES09.PNG" width="380" align="center">
+  <img src="image/Azul_Rojo_SES05.PNG" width="380" align="center">
+  <img src="image/Azul_SES09.PNG" width="380" align="center">
+
+  _Como podemos observar en la gráfica las regiones con el 90% y 50% de la masa de probabilidad_
+  _para los GMM de los locutores SES005(en rojo, arriba) y SES009(en azul, abajo); también se muestra_
+  _la población del usuario SES005(en rojo, izquierda) y SES009(en azul, derecha)._
+
+  **Analice la capacidad del modelado GMM para diferenciar las señales de uno y otro.** FALTA explicar
+  (No sé como determinar si una señal pertenece a uno u otro locutor, no veo las gráficas)
+
+
+  
+
 
 ### Reconocimiento del locutor.
 
@@ -82,6 +243,23 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
+
+  **Para obtener la tasa de errores FEAT=lp run_spkid classerr** ### QUITAR COMENTARIO cuando lo tengamos
+  
+  + **Tasa de Error del parámetro LP**
+
+    ```
+    Wed Dec 9 23:43:16 CET 2020: classerr ---
+    nerr=8  ntot=47 error_rate=17.02%
+    Wed Dec  9 23:43:16 CET 2020
+    ```
+  + **Tasa de Error del parámetro LPCC**
+
+    ```
+  + **Tasa de Error del parámetro MFCC**
+  
+    ```
+    ```
 
 ### Verificación del locutor.
 
@@ -91,6 +269,28 @@ Complete el código necesario para realizar verificación del locutor y optimice
   de verificación de SPEECON. La tabla debe incluir el umbral óptimo, el número de falsas alarmas y de
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
+
+  **Para obtener la tasa del score:  spk_verif_score verif.res** ### QUITAR COMENTARIO cuando lo tengamos
+  
+  + **Score obtenido por la paramtrización LP**
+
+    ```
+    ==============================================
+    THR: -5.44065813919759
+    Missed:     240/250=0.9600
+    FalseAlarm: 0/1000=0.0000
+    ----------------------------------------------
+    ==> CostDetection: 96.0
+    ==============================================
+    ```
+  + **Score obtenido por la paramtrización LPCC**
+
+    ```
+
+  + **Score obtenido por la paramtrización MFCC**
+
+    ```
+    ```
  
 ### Test final
 
