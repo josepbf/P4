@@ -153,7 +153,7 @@ ejercicios indicados.
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
 
-    <img src="image/coef_2_3.PNG" width="640" align="center">
+    <img src="image/coef_2_3.png" width="640" align="center">
      
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
@@ -220,6 +220,7 @@ ejercicios indicados.
   ### RESPONDER
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
+  
   _Según la teoría visualizada en clase consideramos que un orden de 30 coeficientes para el MFCC es suficiente, además con el orden del filtro en 40. Son valores al límite de los recomendados, más sería sobredimensional el sistema con menos no obtenemos mejores resultados. Sobre los coeficientes de LPCC usamos los valores recomendados por la librería SPTK, que nos dan un excelente resultado, siendo 25 el orden del LP y 25 el del LPCC._
 
 ### Entrenamiento y visualización de los GMM.
@@ -270,24 +271,10 @@ Complete el código necesario para realizar reconociminto del locutor y optimice
 
 - Inserte una tabla con la tasa de error obtenida en el reconocimiento de los locutores de la base de datos
   SPEECON usando su mejor sistema de reconocimiento para los parámetros LP, LPCC y MFCC.
-  ### FALTA:
 
-  **Para obtener la tasa de errores FEAT=lp run_spkid classerr** ### QUITAR COMENTARIO cuando lo tengamos
-  
-  + **Tasa de Error del parámetro LP**
-
-    ```
-    Wed Dec 9 23:43:16 CET 2020: classerr ---
-    nerr=8  ntot=47 error_rate=17.02%
-    Wed Dec  9 23:43:16 CET 2020
-    ```
-  + **Tasa de Error del parámetro LPCC**
-
-    ```
-  + **Tasa de Error del parámetro MFCC**
-  
-    ```
-    ```
+  |               |   LP   | LPCC  | MFCC  |
+  |---------------|:------:|:-----:|:-----:|
+  | Tasa de Error | 11.46% | 0.51% | 3.44% |
 
 ### Verificación del locutor.
 
@@ -298,29 +285,9 @@ Complete el código necesario para realizar verificación del locutor y optimice
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
 
-  ### FALTA:
-
-  **Para obtener la tasa del score:  spk_verif_score verif.res** ### QUITAR COMENTARIO cuando lo tengamos
-  
-  + **Score obtenido por la paramtrización LP**
-
-    ```
-    ==============================================
-    THR: -5.44065813919759
-    Missed:     240/250=0.9600
-    FalseAlarm: 0/1000=0.0000
-    ----------------------------------------------
-    ==> CostDetection: 96.0
-    ==============================================
-    ```
-  + **Score obtenido por la paramtrización LPCC**
-
-    ```
-
-  + **Score obtenido por la paramtrización MFCC**
-
-    ```
-    ```
+  |                |  LP  | LPCC | MFCC |
+  |----------------|:----:|:----:|:----:|
+  | Cost Detection | 79.2 | 11.6 | 32.4 |
  
 ### Test final
 

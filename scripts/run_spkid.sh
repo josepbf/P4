@@ -213,7 +213,7 @@ for cmd in $*; do
        compute_$FEAT $final $lists/final/verif.test
        (gmm_verify -d $w/$FEAT -e $FEAT -D $w/gmm/$FEAT -E gmm -w $world $lists/gmm.list  $lists/final/verif.test $lists/final/verif.test.candidates | tee $w/verif_test.log) || exit 1
         perl -ane 'print "$F[0]\t$F[1]\t";
-        if ($F[2] > 1.9885541087056) {print "1\n"}
+        if ($F[2] > -0.986715304811012) {print "1\n"}
         else {print "0\n"}' $w/verif_test.log > verif_test.log
 
    # If the command is not recognize, check if it is the name
