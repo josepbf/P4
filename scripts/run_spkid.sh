@@ -97,7 +97,7 @@ compute_lp() {
     done
 }
 
-compute_lpc2c() {
+compute_lpcc() {
     db=$1
     shift
     for filename in $(sort $*); do
