@@ -294,7 +294,7 @@ Complete el código necesario para realizar verificación del locutor y optimice
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
 
-  ### FALTA:
+  _Adjuntado._
 
 ### Trabajo de ampliación.
 
