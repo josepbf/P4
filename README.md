@@ -124,26 +124,24 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
-  ### FALTA ARREGLARLO Y CAMBIARLO, AHORA MISMO NO VA
 
   ```sh
   # Main command for feature extration
   sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-	$LPC -l 240 -m $lpc_order | $LPC2C -m $lpc_order -M 25 > $base.lpcc
+	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc
 
   # Our array files need a header with the number of cols and rows:
-  ncol=$((lpcc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+  ncol=$((lpcc_order+1))
   nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
   ```
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>: 
-  ### FALTA ACTUALIZARLO
 
   ```sh
   # Main command for feature extration
   sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WINDOW -l 240 -L 240 |
-  $MFCC -l 240 -m $mfcc_order -s 8 -n 40 -w 1 > $base.mfcc
+  $MFCC -l 240 -m $mfcc_order -s 8 -n 40 -w 1 > $base.mfcc 
 
   # Our array files need a header with the number of cols and rows:
   ncol=$((mfcc_order)) 
@@ -155,7 +153,7 @@ ejercicios indicados.
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
 
-    ### FALTA LAS GRÁFICAS DE CADA PARAMETRIZACION de LP LPCC MFCC.
+    <img src="image/coef_2_3.PNG" width="640" align="center">
      
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
     parametrizadas.
@@ -165,39 +163,64 @@ ejercicios indicados.
 
       + _Parametrización LP_
         ```
-          fmatrix_show work/lp/BLOCK01/SES017/*.lp | egrep '^\(' | cut -f4,5 > lp_2_3.txt
+          fmatrix_show work/lp/BLOCK01/SES017/*.lp | egrep '^\[' | cut -f4,5 > lp_2_3.txt
         ```
       + _Parametrización LPCC_
         ```
-          fmatrix_show work/lp/BLOCK01/SES017/*.lpcc | egrep '^\(' | cut -f4,5 > lpcc_2_3.txt
+          fmatrix_show work/lpcc/BLOCK01/SES017/*.lpcc | egrep '^\[' | cut -f4,5 > lpcc_2_3.txt
         ```
       + _Parametrización MFCC_
         ```
-          fmatrix_show work/lp/BLOCK01/SES017/*.mfcc | egrep '^\(' | cut -f4,5 > mfcc_2_3.txt
+          fmatrix_show work/mfcc/BLOCK01/SES017/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc_2_3.txt
         ```
     _Después de convertir a texto los ficheros de parámetros de cada parametrización, hemos representado los valores_
-    _usando Pyton de esa forma obtener las gráficas_ 
+    _usando Pyton:_ 
 
-    ### FALTA EL código de pyton para representar las gráficas no sé si es f4,5 para lp si pero para lpcc y mfcc, no lo encontrado.
+      ```py
+        import matplotlib.pyplot as plt
+        import numpy as np
 
+        lp_2_3 = np.loadtxt('python/lp_2_3.txt')
+        lpcc_2_3 = np.loadtxt('python/lpcc_2_3.txt')
+        mfcc_2_3 = np.loadtxt('python/mfcc_2_3.txt')
 
+        plt.figure()
+
+        plt.subplot(311)
+        plt.plot(lp_2_3[:,0], lp_2_3[:,1],'r,')
+        plt.title('LP')
+        plt.grid()
+
+        plt.subplot(312)
+        plt.plot(lpcc_2_3[:,0], lpcc_2_3[:,1],'r,')
+        plt.title('LPCC')
+        plt.grid()
+
+        plt.subplot(313)
+        plt.plot(mfcc_2_3[:,0], mfcc_2_3[:,1],'r,')
+        plt.title('LPCC')
+        plt.grid()
+
+        plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.45,
+                            wspace=0.35)
+
+        plt.show()
+      ```
 
   + ¿Cuál de ellas le parece que contiene más información?
-
+    ### RESPONDER
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
-  ### FALTA
-
-  |                        | LP   | LPCC | MFCC |
-  |------------------------|:----:|:----:|:----:|
-  | &rho;<sub>x</sub>[2,3] |      |      |      |
+  |                        |     LP    |   LPCC   |    MFCC    |
+  |------------------------|:---------:|:--------:|:----------:|
+  | &rho;<sub>x</sub>[2,3] | -0.872284 | 0.150782 | -0.0812356 |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
-  ### FALTA
+  ### RESPONDER
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
-  ### FALTA
+  _Según la teoría visualizada en clase consideramos que un orden de 30 coeficientes para el MFCC es suficiente, además con el orden del filtro en 40. Son valores al límite de los recomendados, más sería sobredimensional el sistema con menos no obtenemos mejores resultados. Sobre los coeficientes de LPCC usamos los valores recomendados por la librería SPTK, que nos dan un excelente resultado, siendo 25 el orden del LP y 25 el del LPCC._
 
 ### Entrenamiento y visualización de los GMM.
 
@@ -213,7 +236,7 @@ Complete el código necesario para entrenar modelos GMM.
 
   plot_gmm_feat work/gmm/mfcc/SES005.gmm
   ```
-  _Podemos observar en gráfica como se muestran las regiones, por una parte una curva punteada exterior que encierra la región con el 90% de las tramas y con curva continua interna que encierra la región con el 50% de las tramas
+  _Podemos observar en gráfica como se muestran las regiones, por una parte una curva punteada exterior que encierra la región con el 90% de las tramas y con curva continua interna que encierra la región con el 50% de las tramas_
 
 <img src="image/ModelaGMM.PNG" width="400" align="center">
 

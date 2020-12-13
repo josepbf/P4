@@ -14,7 +14,7 @@ cleanup() {
    \rm -f $base.*
 }
 
-if [[ $# != 3 ]]; then
+if [[ $# != 4 ]]; then
    echo "$0 lpc_order lpcc_order input.wav output.lpcc"
    exit 1
 fi
@@ -46,7 +46,7 @@ sox $inputfile -t raw -e signed -b 16 - | $X2X +sf | $FRAME -l 240 -p 80 | $WIND
 	$LPC -l 240 -m $lpc_order | $LPCC -m $lpc_order -M $lpcc_order > $base.lpcc
 
 # Our array files need a header with the number of cols and rows:
-ncol=$((lpcc_order+1)) # lpc p =>  (gain a1 a2 ... ap) 
+ncol=$((lpcc_order+1))
 nrow=`$X2X +fa < $base.lpcc | wc -l | perl -ne 'print $_/'$ncol', "\n";'`
 
 # Build fmatrix file by placing nrow and ncol in front, and the data after them
