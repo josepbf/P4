@@ -124,7 +124,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales de predicción lineal
   (LPCC) en su fichero <code>scripts/wav2lpcc.sh</code>:
-  ### FALTA COMENTARLO UN POQUITO o NO
+  ### FALTA ARREGLARLO Y CAMBIARLO, AHORA MISMO NO VA
 
   ```sh
   # Main command for feature extration
@@ -138,7 +138,7 @@ ejercicios indicados.
 
 - Escriba el *pipeline* principal usado para calcular los coeficientes cepstrales en escala Mel (MFCC) en su
   fichero <code>scripts/wav2mfcc.sh</code>: 
-  ### FALTA COMENTARLO UN POQUITO o NO
+  ### FALTA ACTUALIZARLO
 
   ```sh
   # Main command for feature extration
