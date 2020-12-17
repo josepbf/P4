@@ -66,8 +66,7 @@ int main(int argc, const char *argv[]) {
     gmm.em_split(data,nmix,init_iterations,init_threshold,verbose);
     break;
   default:
-    ///gmm.vq_lbg(data,nmix,init_iterations,init_threshold,verbose); (SI NO LA PONGO SIN COMENTAR el FEAT=mfcc sale un error)
-    ///gmm.vq_lbg(data,nmix,init_iterations,init_threshold,verbose); La hemos de poner si o no??
+    ///gmm.vq_lbg(data,nmix,init_iterations,init_threshold,verbose);    
     ;
   }
 
