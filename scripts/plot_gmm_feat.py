@@ -139,11 +139,15 @@ def plotGMM(fileGMM, xDim, yDim, percents, colorGmm, filesFeat=None, colorFeat=N
     fmt = {levels[i]: f'{percents[i]:.0%}' for i in range(len(levels))}
     ax.clabel(CS, inline=1, fontsize=14, fmt=fmt)
 
-    plt.title(f'Region coverage predicted by {fileGMM}')
+    #plt.title(f'Region coverage predicted by {fileGMM}')
+    #plt.axis('tight')
+    #plt.axis(limits)
+    #plt.show()
+
+    plt.title(f'GMM: SES009, LOC: SES09')
     plt.axis('tight')
     plt.axis(limits)
     plt.show()
-
 
 ########################################################################################################
 # Main Program
@@ -159,8 +163,8 @@ Options:
     --yDim INT, -x INT               'x' dimension to use from GMM and feature vectors [default: 0]
     --xDim INT, -y INT               'y' dimension to use from GMM and feature vectors [default: 1]
     --percents FLOAT..., -p FLOAT...  Percentages covered by the regions [default: 90,50]
-    --colorGMM STR, -g STR            Color of the GMM regions boundaries [default: red]
-    --colorFEAT STR, -f STR           Color of the feature population [default: red]
+    --colorGMM STR, -g STR            Color of the GMM regions boundaries [default: blue]
+    --colorFEAT STR, -f STR           Color of the feature population [default: blue]
     --limits xyLimits -l xyLimits     xyLimits are the four values xMin,xMax,yMin,yMax [default: auto]
 
     --help, -h                        Shows this message
