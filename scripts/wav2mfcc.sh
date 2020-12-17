@@ -15,9 +15,7 @@ if [[ $# != 3 ]]; then
    echo "$0 mfcc_order input.wav output.mfcc"
    exit 1
 fi
-#El profesor ha dicho que en mfcc_orden haría falta el orden de analisis y el número de coeficientes
-#Para hacerlo bien debería de poner dos coeficientes el número del banco del filtro y el número de coefi castrales
-#lpc_order=$1
+
 mfcc_order=$1
 inputfile=$2
 outputfile=$3
