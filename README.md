@@ -152,7 +152,7 @@ ejercicios indicados.
 
 - Inserte una imagen mostrando la dependencia entre los coeficientes 2 y 3 de las tres parametrizaciones
   para todas las señales de un locutor.
-
+    ### En la última gráfica tiene que decir MFCC
     <img src="image/coef_2_3.png" width="640" align="center">
      
   + Indique **todas** las órdenes necesarias para obtener las gráficas a partir de las señales 
@@ -174,7 +174,7 @@ ejercicios indicados.
           fmatrix_show work/mfcc/BLOCK01/SES017/*.mfcc | egrep '^\[' | cut -f4,5 > mfcc_2_3.txt
         ```
     _Después de convertir a texto los ficheros de parámetros de cada parametrización, hemos representado los valores_
-    _usando Pyton:_ 
+    _usando Python:_ 
 
       ```py
         import matplotlib.pyplot as plt
@@ -208,7 +208,21 @@ ejercicios indicados.
       ```
 
   + ¿Cuál de ellas le parece que contiene más información?
-    ### RESPONDER
+    
+    _Cuando se refiere que sistema de extracción  de características contiene más información, quiere decir,_ 
+    _cual es el mejor método que nos proporcione los coeficientes más incorrelados, ya que de esa forma habrá menos redundancia._
+
+    _Por lo tanto, con el objetivo de saber qué método contiene mejor información, se ha procedido a graficarlas:_
+
+    + LP: _Observamos que los coeficientes presentan una distribución prácticamente lineal, por lo cual nos aporta poca información._
+
+    + LPCC: _Vemos que en los coeficientes  tiene una distribución dispersa, es decir, que coeficientes son incorrelados_
+      _y obtendremos una elevada información._
+
+    + MFCC: _A primera instancia a diferencia de los dos métodos anteriores vemos que los coeficientes son más incorrelados._ 
+    
+    _En conclusión, el método de extracción  que nos aporta más información es el MFCC._
+
 - Usando el programa <code>pearson</code>, obtenga los coeficientes de correlación normalizada entre los
   parámetros 2 y 3 para un locutor, y rellene la tabla siguiente con los valores obtenidos.
 
@@ -217,7 +231,8 @@ ejercicios indicados.
   | &rho;<sub>x</sub>[2,3] | -0.872284 | 0.150782 | -0.0812356 |
   
   + Compare los resultados de <code>pearson</code> con los obtenidos gráficamente.
-  ### RESPONDER
+
+  _Observamos que los resultados son los esperados. Por una parte, vemos en el LP que en los coeficientes 2 y 3, aporta poca información; en el caso del LPCC aporta un poco más de información pero el MFCC sin duda es el que aporta más información_
   
 - Según la teoría, ¿qué parámetros considera adecuados para el cálculo de los coeficientes LPCC y MFCC?
   
@@ -258,11 +273,7 @@ Complete el código necesario para entrenar modelos GMM.
   _para los GMM de los locutores SES005(en rojo, arriba) y SES009(en azul, abajo); también se muestra_
   _la población del usuario SES005(en rojo, izquierda) y SES009(en azul, derecha)._
 
-  ### FALTA: Analice la capacidad del modelado GMM para diferenciar las señales de uno y otro.** FALTA explicar
-  (No sé como determinar si una señal pertenece a uno u otro locutor, no veo las gráficas)
-
-
-  
+  _Por lo tanto, vemos que no hay una mayor  densidad en el centro, ya que no hay coincidencia entre las regiones y la población pero en la zona que hay una mayor densidad es en la parte central inferior, donde nos permitirá saber que señal pertenece a uno o otro locutor_ 
 
 
 ### Reconocimiento del locutor.
@@ -285,6 +296,8 @@ Complete el código necesario para realizar verificación del locutor y optimice
   pérdidas, y el score obtenido usando la parametrización que mejor resultado le hubiera dado en la tarea
   de reconocimiento.
 
+  ### FALTA: incluir el umbral óptimo, el número de falsas alarmas y de  pérdidas
+
   |                |  LP  | LPCC | MFCC |
   |----------------|:----:|:----:|:----:|
   | Cost Detection | 79.2 | 11.6 | 32.4 |
@@ -294,7 +307,8 @@ Complete el código necesario para realizar verificación del locutor y optimice
 - Adjunte, en el repositorio de la práctica, los ficheros `class_test.log` y `verif_test.log` 
   correspondientes a la evaluación *ciega* final.
 
-  _Adjuntado._
+  _Adjuntado_ [**class_test.log**](https://github.com/josepbf/P4/blob/josep-ingrid/class_test.log)
+  _y_ [**verif_test.log**](https://github.com/josepbf/P4/blob/josep-ingrid/verif_test.log)
 
 ### Trabajo de ampliación.
 
