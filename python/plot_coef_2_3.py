@@ -19,7 +19,7 @@ plt.grid()
 
 plt.subplot(313)
 plt.plot(mfcc_2_3[:,0], mfcc_2_3[:,1],'r,')
-plt.title('LPCC')
+plt.title('MFCC')
 plt.grid()
 
 plt.subplots_adjust(top=0.92, bottom=0.08, left=0.10, right=0.95, hspace=0.45,

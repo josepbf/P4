@@ -298,9 +298,12 @@ Complete el código necesario para realizar verificación del locutor y optimice
 
   ### FALTA: incluir el umbral óptimo, el número de falsas alarmas y de  pérdidas
 
-  |                |  LP  | LPCC | MFCC |
-  |----------------|:----:|:----:|:----:|
-  | Cost Detection | 79.2 | 11.6 | 32.4 |
+  |                |   LP  |  LPCC |  MFCC |
+  |----------------|:-----:|:-----:|:-----:|
+  |      THR       |-0.0047|-0.9867|-0.5255|
+  |     Missed     |   99  |   29  |   81  |
+  |   False Alarm  |    4  |    0  |   0   |
+  | Cost Detection |  79.2 | 11.6 |  32.4  |
  
 ### Test final
 
